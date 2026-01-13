@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Hardened Runtime Exceptions (required for notarization) -->
+
+    <!-- Allow loading unsigned libraries (if needed for any dependencies) -->
+    <!-- <key>com.apple.security.cs.disable-library-validation</key>
+    <true/> -->
+
+    <!-- Allow JIT compilation (not needed for this app) -->
+    <!-- <key>com.apple.security.cs.allow-jit</key>
+    <true/> -->
+
+    <!-- Allow unsigned executable memory (not needed for this app) -->
+    <!-- <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/> -->
+
+    <!-- Accessibility access (requested at runtime via AXIsProcessTrusted) -->
+    <!-- Note: This is granted via System Settings, not entitlements -->
+
+    <!-- Network access for API calls -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- Keychain access group (ties keychain items to your Team ID) -->
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)com.reword.app</string>
+    </array>
+</dict>
+</plist>

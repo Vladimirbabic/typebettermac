@@ -1,0 +1,46 @@
+name: Reword
+options:
+  bundleIdPrefix: com.reword
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+
+settings:
+  SWIFT_VERSION: "5.9"
+  MACOSX_DEPLOYMENT_TARGET: "13.0"
+  ARCHS: arm64
+
+targets:
+  Reword:
+    type: application
+    platform: macOS
+    sources:
+      - Reword
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.reword.app
+      INFOPLIST_FILE: Reword/Info.plist
+      CODE_SIGN_ENTITLEMENTS: Reword/Reword.entitlements
+      LD_RUNPATH_SEARCH_PATHS:
+        - $(inherited)
+        - "@executable_path/../Frameworks"
+
+      # === CODE SIGNING (Direct Download / Notarized) ===
+      # Replace with your Apple Developer Team ID
+      # Find it at: https://developer.apple.com/account → Membership → Team ID
+      DEVELOPMENT_TEAM: ""  # ← PUT YOUR TEAM ID HERE
+      CODE_SIGN_STYLE: Automatic
+      CODE_SIGN_IDENTITY: "Developer ID Application"
+
+      # Required for notarization
+      ENABLE_HARDENED_RUNTIME: YES
+
+      # Optional: Enable for universal binary (Intel + Apple Silicon)
+      # ARCHS: "$(ARCHS_STANDARD)"
+
+    info:
+      path: Reword/Info.plist
+      properties:
+        LSUIElement: true
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSHumanReadableCopyright: "Copyright © 2024 Reword. All rights reserved."
