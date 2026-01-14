@@ -24,10 +24,8 @@ enum UIConstants {
     }
 
     enum SettingsWindow {
-        static let width: CGFloat = 500
-        static let height: CGFloat = 450
-        static let tabViewWidth: CGFloat = 500
-        static let tabViewHeight: CGFloat = 400
+        static let width: CGFloat = 520
+        static let height: CGFloat = 420
     }
 
     enum PromptEditor {
@@ -85,9 +83,9 @@ enum APIConstants {
         static let temperature = 0.7
     }
 
-    enum Ollama {
-        static let defaultEndpoint = "http://localhost:11434"
-        static let timeoutInterval: TimeInterval = 120
+    enum Gemini {
+        static let baseURL = "https://generativelanguage.googleapis.com/v1beta/models"
+        static let maxTokens = 4096
         static let temperature = 0.7
     }
 }

@@ -1,0 +1,7 @@
+{
+    "version": "1.0.0",
+    "build": "1",
+    "download_url": "https://typebetter.app/download",
+    "release_notes": "Initial release",
+    "minimum_system_version": "13.0"
+}

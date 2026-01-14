@@ -41,7 +41,7 @@ enum AIServiceError: LocalizedError {
 final class AIServiceManager: Sendable {
     private let claudeService = ClaudeService()
     private let openAIService = OpenAIService()
-    private let ollamaService = OllamaService()
+    private let geminiService = GeminiService()
 
     func rephrase(text: String, prompt: RephrasePrompt) async throws -> String {
         let provider = SettingsManager.shared.selectedProvider
@@ -51,7 +51,7 @@ final class AIServiceManager: Sendable {
         let service: any AIService = switch provider {
         case .claude: claudeService
         case .openai: openAIService
-        case .ollama: ollamaService
+        case .gemini: geminiService
         }
 
         return try await service.rephrase(text: text, prompt: prompt)

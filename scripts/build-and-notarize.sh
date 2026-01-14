@@ -2,10 +2,32 @@
 set -e
 
 # === CONFIGURATION ===
-APP_NAME="Reword"
-SCHEME="Reword"
+APP_NAME="TypeBetter"
+SCHEME="TypeBetter"
 BUNDLE_ID="com.reword.app"
-KEYCHAIN_PROFILE="RewordNotarize"  # Created with: xcrun notarytool store-credentials
+
+# === CREDENTIALS (from environment variables) ===
+# Set these in your shell profile (~/.zshrc or ~/.bashrc):
+#   export APPLE_ID="your@email.com"
+#   export APPLE_TEAM_ID="7MKQAN7HM5"
+#   export APPLE_APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"  # App-specific password from appleid.apple.com
+#
+# Or pass them when running:
+#   APPLE_ID=you@email.com APPLE_APP_PASSWORD=xxxx ./build-and-notarize.sh
+
+if [ -z "$APPLE_ID" ] || [ -z "$APPLE_APP_PASSWORD" ]; then
+    echo "Error: Missing credentials"
+    echo ""
+    echo "Set environment variables:"
+    echo "  export APPLE_ID=\"your@email.com\""
+    echo "  export APPLE_TEAM_ID=\"YOUR_TEAM_ID\""
+    echo "  export APPLE_APP_PASSWORD=\"xxxx-xxxx-xxxx-xxxx\""
+    echo ""
+    echo "Get an app-specific password at: https://appleid.apple.com/account/manage"
+    exit 1
+fi
+
+APPLE_TEAM_ID="${APPLE_TEAM_ID:-7MKQAN7HM5}"
 
 # === PATHS ===
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -79,7 +101,9 @@ echo_step "Submitting for notarization..."
 echo "  This may take a few minutes..."
 
 xcrun notarytool submit "$APP_PATH" \
-  --keychain-profile "$KEYCHAIN_PROFILE" \
+  --apple-id "$APPLE_ID" \
+  --team-id "$APPLE_TEAM_ID" \
+  --password "$APPLE_APP_PASSWORD" \
   --wait
 
 # === STAPLE ===
@@ -100,7 +124,9 @@ hdiutil create -volname "$APP_NAME" \
 # Notarize DMG too
 echo_step "Notarizing DMG..."
 xcrun notarytool submit "$DMG_PATH" \
-  --keychain-profile "$KEYCHAIN_PROFILE" \
+  --apple-id "$APPLE_ID" \
+  --team-id "$APPLE_TEAM_ID" \
+  --password "$APPLE_APP_PASSWORD" \
   --wait
 
 xcrun stapler staple "$DMG_PATH"

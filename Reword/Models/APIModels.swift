@@ -82,36 +82,44 @@ struct OpenAIError: Decodable {
     let code: String?
 }
 
-// MARK: - Ollama API Models
+// MARK: - Gemini API Models
 
-struct OllamaRequest: Encodable {
-    let model: String
-    let prompt: String
-    let stream: Bool
-    let options: OllamaOptions
+struct GeminiRequest: Encodable {
+    let contents: [GeminiContent]
+    let generationConfig: GeminiGenerationConfig
 }
 
-struct OllamaOptions: Encodable {
+struct GeminiContent: Codable {
+    let parts: [GeminiPart]
+    let role: String?
+
+    init(parts: [GeminiPart], role: String? = nil) {
+        self.parts = parts
+        self.role = role
+    }
+}
+
+struct GeminiPart: Codable {
+    let text: String
+}
+
+struct GeminiGenerationConfig: Encodable {
+    let maxOutputTokens: Int
     let temperature: Double
 }
 
-struct OllamaResponse: Decodable {
-    let response: String
-    let done: Bool
+struct GeminiResponse: Decodable {
+    let candidates: [GeminiCandidate]?
+    let error: GeminiError?
 }
 
-struct OllamaTagsResponse: Decodable {
-    let models: [OllamaModel]
+struct GeminiCandidate: Decodable {
+    let content: GeminiContent
+    let finishReason: String?
 }
 
-struct OllamaModel: Decodable {
-    let name: String
-    let modifiedAt: String?
-    let size: Int64?
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case modifiedAt = "modified_at"
-        case size
-    }
+struct GeminiError: Decodable {
+    let code: Int
+    let message: String
+    let status: String
 }

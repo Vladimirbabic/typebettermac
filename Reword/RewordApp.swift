@@ -4,30 +4,57 @@ import ApplicationServices
 import OSLog
 
 @main
-struct RewordApp: App {
+struct TypeBetterApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
+        // No default scene - this is a menu bar app
+        // Settings window is managed by AppDelegate
         Settings {
-            SettingsView()
+            EmptyView()
         }
     }
 }
 
 // MARK: - AppDelegate
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
+    private var onboardingWindow: NSWindow?
+    private var tooltipPopover: NSPopover?
+    private var tooltipTimer: Timer?
 
     private let textCaptureService = TextCaptureService()
     private let hotkeyService = HotkeyService()
     private let aiService = AIServiceManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Disable window restoration to prevent settings from auto-showing
+        UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
+
         setupMenuBar()
         setupHotkey()
-        checkAccessibilityPermissions()
+
+        if !SettingsManager.shared.hasCompletedOnboarding {
+            showOnboarding()
+        }
+
+        // Check for updates after a short delay (don't slow down launch)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            UpdateService.shared.checkForUpdatesInBackground()
+        }
+    }
+
+    // Prevent any automatic window showing on reopen
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // Don't automatically open any windows - user should use menu or hotkey
+        return false
+    }
+
+    // Prevent window state restoration
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return false
     }
 
     private func setupMenuBar() {
@@ -56,12 +83,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(.separator())
 
-        let promptsItem = NSMenuItem(title: "Prompts", action: nil, keyEquivalent: "")
-        promptsItem.submenu = createPromptsSubmenu()
-        menu.addItem(promptsItem)
-
-        menu.addItem(.separator())
-
         let settingsItem = NSMenuItem(
             title: "Settings...",
             action: #selector(openSettings),
@@ -70,10 +91,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settingsItem.target = self
         menu.addItem(settingsItem)
 
+        let updateItem = NSMenuItem(
+            title: "Check for Updates...",
+            action: #selector(checkForUpdates),
+            keyEquivalent: ""
+        )
+        updateItem.target = self
+        menu.addItem(updateItem)
+
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: "Quit Reword",
+            title: "Quit TypeBetter",
             action: #selector(quitApp),
             keyEquivalent: "q"
         )
@@ -83,47 +112,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return menu
     }
 
-    private func createPromptsSubmenu() -> NSMenu {
-        let menu = NSMenu()
-        let prompts = SettingsManager.shared.prompts
-
-        if prompts.isEmpty {
-            let noPromptsItem = NSMenuItem(title: "No custom prompts", action: nil, keyEquivalent: "")
-            noPromptsItem.isEnabled = false
-            menu.addItem(noPromptsItem)
-        } else {
-            for (index, prompt) in prompts.enumerated() {
-                let item = NSMenuItem(
-                    title: prompt.name,
-                    action: #selector(selectPrompt(_:)),
-                    keyEquivalent: index < 9 ? "\(index + 1)" : ""
-                )
-                item.tag = index
-                item.target = self
-                menu.addItem(item)
-            }
-        }
-
-        menu.addItem(.separator())
-
-        let addPromptItem = NSMenuItem(
-            title: "Add New Prompt...",
-            action: #selector(openSettings),
-            keyEquivalent: ""
-        )
-        addPromptItem.target = self
-        menu.addItem(addPromptItem)
-
-        return menu
-    }
-
-    @objc private func selectPrompt(_ sender: NSMenuItem) {
-        let index = sender.tag
-        let prompts = SettingsManager.shared.prompts
-        guard index < prompts.count else { return }
-
-        SettingsManager.shared.selectedPromptIndex = index
-        rephraseSelectedText()
+    @objc private func checkForUpdates() {
+        UpdateService.shared.checkForUpdates()
     }
 
     private func setupHotkey() {
@@ -132,32 +122,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.rephraseSelectedText()
         }
         Logger.app.info("Hotkey service started")
-    }
-
-    private func checkAccessibilityPermissions() {
-        let hasPermission = AXIsProcessTrusted()
-        Logger.app.info("Accessibility permission: \(hasPermission)")
-
-        guard !hasPermission else { return }
-
-        let alert = NSAlert()
-        alert.messageText = "Accessibility Permission Required"
-        alert.informativeText = """
-            Reword needs Accessibility permission to read selected text and simulate copy/paste.
-
-            1. Click 'Open Settings'
-            2. Click the '+' button
-            3. Add Reword app
-            4. Toggle it ON
-            5. Restart Reword
-            """
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Open Settings")
-        alert.addButton(withTitle: "Later")
-
-        if alert.runModal() == .alertFirstButtonReturn {
-            NSWorkspace.shared.open(SystemURLs.accessibilitySettings)
-        }
     }
 
     @objc private func rephraseSelectedText() {
@@ -173,10 +137,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         Task { @MainActor in
             guard let selectedText = await textCaptureService.getSelectedText(), !selectedText.isEmpty else {
-                showAlert(
-                    title: "No Text Selected",
-                    message: "Select some text first, then press the hotkey.\n\nMake sure Reword has Accessibility permission."
-                )
+                showMenuBarTooltip(message: "No text selected", isError: true)
                 return
             }
 
@@ -201,6 +162,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
                 let rephrasedText = try await aiService.rephrase(text: selectedText, prompt: prompt)
                 await textCaptureService.replaceSelectedText(with: rephrasedText)
+
+                // Play success sound
+                NSSound(named: "Pop")?.play()
 
                 Logger.app.info("Text rephrased successfully")
             } catch {
@@ -231,6 +195,73 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         alert.runModal()
     }
 
+    private func showMenuBarTooltip(message: String, isError: Bool = false) {
+        // Cancel any existing tooltip
+        tooltipTimer?.invalidate()
+        tooltipPopover?.close()
+
+        // Play error sound
+        if isError {
+            NSSound(named: "Basso")?.play()
+        }
+
+        // Create tooltip view
+        let tooltipView = MenuBarTooltipView(message: message, isError: isError)
+        let hostingController = NSHostingController(rootView: tooltipView)
+
+        // Create popover
+        let popover = NSPopover()
+        popover.contentViewController = hostingController
+        popover.behavior = .transient
+        popover.animates = true
+
+        // Show from status bar button
+        if let button = statusItem?.button {
+            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        }
+
+        self.tooltipPopover = popover
+
+        // Auto-dismiss after 2 seconds
+        tooltipTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
+            self?.tooltipPopover?.close()
+            self?.tooltipPopover = nil
+        }
+    }
+
+    private func showOnboarding() {
+        if onboardingWindow == nil {
+            onboardingWindow = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 500, height: 480),
+                styleMask: [.titled, .closable, .fullSizeContentView],
+                backing: .buffered,
+                defer: false
+            )
+            onboardingWindow?.titlebarAppearsTransparent = true
+            onboardingWindow?.titleVisibility = .hidden
+            onboardingWindow?.backgroundColor = .black
+            onboardingWindow?.isReleasedWhenClosed = false
+            onboardingWindow?.delegate = self
+
+            let onboardingView = OnboardingView {
+                self.closeOnboarding()
+            }
+            onboardingWindow?.contentView = NSHostingView(rootView: onboardingView)
+            onboardingWindow?.center()
+        }
+
+        // Show app in Dock
+        NSApp.setActivationPolicy(.regular)
+        onboardingWindow?.makeKeyAndOrderFront(nil)
+        activateApp()
+    }
+
+    private func closeOnboarding() {
+        onboardingWindow?.close()
+        onboardingWindow = nil
+        hideFromDockIfNoWindows()
+    }
+
     @objc private func openSettings() {
         if settingsWindow == nil {
             settingsWindow = NSWindow(
@@ -243,12 +274,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 backing: .buffered,
                 defer: false
             )
-            settingsWindow?.title = "Reword Settings"
+            settingsWindow?.title = "TypeBetter Settings"
             settingsWindow?.contentView = NSHostingView(rootView: SettingsView())
             settingsWindow?.center()
             settingsWindow?.isReleasedWhenClosed = false
+            settingsWindow?.delegate = self
         }
 
+        // Show app in Dock
+        NSApp.setActivationPolicy(.regular)
         settingsWindow?.makeKeyAndOrderFront(nil)
         activateApp()
     }
@@ -261,7 +295,53 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func hideFromDockIfNoWindows() {
+        // Check if any managed windows are still open
+        let hasVisibleWindows = (settingsWindow?.isVisible == true) || (onboardingWindow?.isVisible == true)
+        if !hasVisibleWindows {
+            NSApp.setActivationPolicy(.accessory)
+        }
+    }
+
     @objc private func quitApp() {
         NSApplication.shared.terminate(nil)
+    }
+
+    // MARK: - NSWindowDelegate
+
+    func windowWillClose(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+
+        // Clear reference and hide from dock if needed
+        if window === settingsWindow {
+            settingsWindow = nil
+        } else if window === onboardingWindow {
+            onboardingWindow = nil
+        }
+
+        // Delay slightly to allow window to fully close
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.hideFromDockIfNoWindows()
+        }
+    }
+}
+
+// MARK: - Menu Bar Tooltip View
+
+struct MenuBarTooltipView: View {
+    let message: String
+    let isError: Bool
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: isError ? "xmark.circle.fill" : "checkmark.circle.fill")
+                .font(.system(size: 16))
+                .foregroundColor(isError ? .red : .green)
+
+            Text(message)
+                .font(.system(size: 13, weight: .medium))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 }

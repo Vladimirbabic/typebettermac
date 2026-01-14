@@ -1,0 +1,19 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+
+# Sparkle signing keys (NEVER commit these!)
+SparkleKeys/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Archives and Releases
+*.zip
+*.dmg
+Releases/

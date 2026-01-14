@@ -1,9 +1,14 @@
-name: Reword
+name: TypeBetter
 options:
   bundleIdPrefix: com.reword
   deploymentTarget:
     macOS: "13.0"
   xcodeVersion: "15.0"
+
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.0.0"
 
 settings:
   SWIFT_VERSION: "5.9"
@@ -11,12 +16,15 @@ settings:
   ARCHS: arm64
 
 targets:
-  Reword:
+  TypeBetter:
     type: application
     platform: macOS
     sources:
       - Reword
+    dependencies:
+      - package: Sparkle
     settings:
+      PRODUCT_NAME: TypeBetter
       PRODUCT_BUNDLE_IDENTIFIER: com.reword.app
       INFOPLIST_FILE: Reword/Info.plist
       CODE_SIGN_ENTITLEMENTS: Reword/Reword.entitlements
@@ -27,9 +35,9 @@ targets:
       # === CODE SIGNING (Direct Download / Notarized) ===
       # Replace with your Apple Developer Team ID
       # Find it at: https://developer.apple.com/account → Membership → Team ID
-      DEVELOPMENT_TEAM: ""  # ← PUT YOUR TEAM ID HERE
+      DEVELOPMENT_TEAM: "7MKQAN7HM5"
       CODE_SIGN_STYLE: Automatic
-      CODE_SIGN_IDENTITY: "Developer ID Application"
+      CODE_SIGN_IDENTITY: "-"
 
       # Required for notarization
       ENABLE_HARDENED_RUNTIME: YES
