@@ -29,6 +29,25 @@
         <!-- PASTE NEW VERSIONS HERE (newest first) -->
 
         <item>
+            <title>Version 1.2</title>
+            <description><![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                    <li>Automatic updates enabled</li>
+                </ul>
+            ]]></description>
+            <pubDate>Tue, 14 Jan 2026 23:30:00 +0000</pubDate>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Vladimirbabic/typebettermac/releases/download/v1.2/TypeBetter-1.2.zip"
+                sparkle:edSignature="EFvXP47JC8WhpCXQTcQ69E5OqsJ6AsbCVKS7IWqRNizemiDzO5ON8plzw+KD/kBZpoJLOXu3/9YGOzqy537/DA=="
+                length="1397493"
+                type="application/octet-stream"/>
+        </item>
+
+        <item>
             <title>Version 1.1</title>
             <description><![CDATA[
                 <h2>What's New</h2>
