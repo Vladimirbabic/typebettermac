@@ -4,7 +4,7 @@ set -e
 # === CONFIGURATION ===
 APP_NAME="TypeBetter"
 SCHEME="TypeBetter"
-BUNDLE_ID="com.reword.app"
+BUNDLE_ID="com.typebetter.app"
 
 # === CREDENTIALS (from environment variables) ===
 # Set these in your shell profile (~/.zshrc or ~/.bashrc):

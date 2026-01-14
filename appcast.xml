@@ -29,6 +29,25 @@
         <!-- PASTE NEW VERSIONS HERE (newest first) -->
 
         <item>
+            <title>Version 1.5</title>
+            <description><![CDATA[
+                <h2>What's New</h2>
+                <ul>
+                    <li>Notarized by Apple for secure distribution</li>
+                </ul>
+            ]]></description>
+            <pubDate>Tue, 14 Jan 2026 23:45:00 +0000</pubDate>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>1.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Vladimirbabic/typebettermac/releases/download/v1.5/TypeBetter-1.5.zip"
+                sparkle:edSignature="5SpCcdkccsm42CftdWwAc0+nn9MFL8IuhFODs9P+ZIS36pLcZH+bHs2cZgEYlBrnv2jYmVMQ7wWYfv+OEeoiAQ=="
+                length="1285136"
+                type="application/octet-stream"/>
+        </item>
+
+        <item>
             <title>Version 1.4</title>
             <description><![CDATA[
                 <h2>What's New</h2>

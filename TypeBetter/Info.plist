@@ -15,24 +15,12 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4</string>
+	<string>1.5</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.productivity</string>
+	<string>6</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 TypeBetter. All rights reserved.</string>
-	<key>SUPublicEDKey</key>
-	<string>Zm6BMUkB/UwYb3aPUvzl086c6ZuTD8Ok98cbug6h6w4=</string>
-	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/Vladimirbabic/typebettermac/main/appcast.xml</string>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
-	<key>SUAutomaticallyUpdate</key>
-	<true/>
-	<key>SUScheduledCheckInterval</key>
-	<integer>86400</integer>
 </dict>
 </plist>
