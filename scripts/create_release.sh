@@ -20,8 +20,8 @@ echo "GitHub Repo: $GITHUB_REPO"
 echo ""
 
 # Get version from Info.plist
-VERSION=$(defaults read "$PROJECT_DIR/Reword/Info.plist" CFBundleShortVersionString 2>/dev/null || echo "1.0")
-BUILD=$(defaults read "$PROJECT_DIR/Reword/Info.plist" CFBundleVersion 2>/dev/null || echo "1")
+VERSION=$(defaults read "$PROJECT_DIR/TypeBetter/Info.plist" CFBundleShortVersionString 2>/dev/null || echo "1.0")
+BUILD=$(defaults read "$PROJECT_DIR/TypeBetter/Info.plist" CFBundleVersion 2>/dev/null || echo "1")
 
 echo "Current version: $VERSION (build $BUILD)"
 echo ""
@@ -51,7 +51,7 @@ if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
     echo "  5. Save to: $PROJECT_DIR/build/Release/"
     echo ""
     echo "Or build from command line:"
-    echo "  xcodebuild -project Reword.xcodeproj -scheme TypeBetter -configuration Release build CONFIGURATION_BUILD_DIR=$PROJECT_DIR/build/Release"
+    echo "  xcodebuild -project TypeBetter.xcodeproj -scheme TypeBetter -configuration Release build CONFIGURATION_BUILD_DIR=$PROJECT_DIR/build/Release"
     exit 1
 fi
 
