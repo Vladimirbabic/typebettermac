@@ -24,7 +24,7 @@
 		848185DC708FE56CE00A676B /* icon.json in Resources */ = {isa = PBXBuildFile; fileRef = C6425D5E19CD9B875D03C637 /* icon.json */; };
 		8ED72CA895F07F3BDB6EDE10 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107AD86C3FE76B1F29423914 /* Constants.swift */; };
 		94A5B44DDE717C574FC4570B /* LaunchAtLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CB8219A838FD0057578E27 /* LaunchAtLoginService.swift */; };
-		A3CB4214354B8515AECDF69D /* RewordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C216E8F250B4E3CC7E6DF43D /* RewordApp.swift */; };
+		A3CB4214354B8515AECDF69D /* TypeBetterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C216E8F250B4E3CC7E6DF43D /* RewordApp.swift */; };
 		A5780E2022F6A103FF4BDCBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8B82A07B1DA67F8637657E /* Assets.xcassets */; };
 		B460E25377BD0A71CD5CF1D7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26DA72E10742370748A7A0A8 /* SettingsView.swift */; };
 		B9879B9959C78CABA11D9100 /* QuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDE85D82812B0FE26A1DEBA /* QuickAction.swift */; };
@@ -58,11 +58,11 @@
 		87CB8219A838FD0057578E27 /* LaunchAtLoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginService.swift; sourceTree = "<group>"; };
 		8EDE85D82812B0FE26A1DEBA /* QuickAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAction.swift; sourceTree = "<group>"; };
 		A476FBAE69EE244D84E8160C /* RephrasePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RephrasePrompt.swift; sourceTree = "<group>"; };
-		A8D8724CFD1ACDBD1D7FA9B6 /* Reword.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Reword.entitlements; sourceTree = "<group>"; };
+		A8D8724CFD1ACDBD1D7FA9B6 /* TypeBetter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TypeBetter.entitlements; sourceTree = "<group>"; };
 		A9E0CA881D084C0859D816F4 /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		AEA25D960A7F3AB96205BD17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BADC0097A1CFB00C014AADEE /* PromptEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptEditorView.swift; sourceTree = "<group>"; };
-		C216E8F250B4E3CC7E6DF43D /* RewordApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewordApp.swift; sourceTree = "<group>"; };
+		C216E8F250B4E3CC7E6DF43D /* TypeBetterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeBetterApp.swift; sourceTree = "<group>"; };
 		C6425D5E19CD9B875D03C637 /* icon.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = icon.json; sourceTree = "<group>"; };
 		C7A5104C0B37FE2B9BF66281 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		C9BBE77BE9E011D21252116E /* HotkeyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyRecorderView.swift; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		3529BF736BC4B702B237865A = {
 			isa = PBXGroup;
 			children = (
-				DECFCAC100DE3B57572EF183 /* Reword */,
+				DECFCAC100DE3B57572EF183 /* TypeBetter */,
 				D914D00C9E71399F0812C6E4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,13 +128,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A66EE875279B1E57B95E1711 /* Reword.icon */ = {
+		A66EE875279B1E57B95E1711 /* TypeBetter.icon */ = {
 			isa = PBXGroup;
 			children = (
 				C6425D5E19CD9B875D03C637 /* icon.json */,
 				A6ED7A6EAD566D82A0C208BA /* Assets */,
 			);
-			path = Reword.icon;
+			path = TypeBetter.icon;
 			sourceTree = "<group>";
 		};
 		A6ED7A6EAD566D82A0C208BA /* Assets */ = {
@@ -173,21 +173,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DECFCAC100DE3B57572EF183 /* Reword */ = {
+		DECFCAC100DE3B57572EF183 /* TypeBetter */ = {
 			isa = PBXGroup;
 			children = (
 				1F8B82A07B1DA67F8637657E /* Assets.xcassets */,
 				107AD86C3FE76B1F29423914 /* Constants.swift */,
 				AEA25D960A7F3AB96205BD17 /* Info.plist */,
-				A8D8724CFD1ACDBD1D7FA9B6 /* Reword.entitlements */,
-				C216E8F250B4E3CC7E6DF43D /* RewordApp.swift */,
+				A8D8724CFD1ACDBD1D7FA9B6 /* TypeBetter.entitlements */,
+				C216E8F250B4E3CC7E6DF43D /* TypeBetterApp.swift */,
 				8996ADDE48875731C07504F9 /* Models */,
-				A66EE875279B1E57B95E1711 /* Reword.icon */,
+				A66EE875279B1E57B95E1711 /* TypeBetter.icon */,
 				18DC048B887AFD021FD53F25 /* Services */,
 				BEEE159E707A6BE6F77AE051 /* Utilities */,
 				312F651C14E861D39995111B /* Views */,
 			);
-			path = Reword;
+			path = TypeBetter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +284,7 @@
 				687942A09E4D3E49539F343C /* PromptEditorView.swift in Sources */,
 				B9879B9959C78CABA11D9100 /* QuickAction.swift in Sources */,
 				DC206FA770FF39A38995B6FF /* RephrasePrompt.swift in Sources */,
-				A3CB4214354B8515AECDF69D /* RewordApp.swift in Sources */,
+				A3CB4214354B8515AECDF69D /* TypeBetterApp.swift in Sources */,
 				3D47B3FB63B084FC3868133A /* Settings.swift in Sources */,
 				B460E25377BD0A71CD5CF1D7 /* SettingsView.swift in Sources */,
 				E9142A7C9E45F1F1F36BC080 /* TextCaptureService.swift in Sources */,
@@ -301,14 +301,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Reword/Reword.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TypeBetter/TypeBetter.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7MKQAN7HM5;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = Reword/Info.plist;
+				INFOPLIST_FILE = TypeBetter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TypeBetter;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -324,14 +324,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Reword/Reword.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TypeBetter/TypeBetter.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7MKQAN7HM5;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = Reword/Info.plist;
+				INFOPLIST_FILE = TypeBetter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TypeBetter;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
