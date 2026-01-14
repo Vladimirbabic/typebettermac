@@ -44,6 +44,11 @@ targets:
       path: TypeBetter/Info.plist
       properties:
         LSUIElement: true
-        CFBundleShortVersionString: "1.7"
-        CFBundleVersion: "8"
+        CFBundleShortVersionString: "1.8"
+        CFBundleVersion: "9"
         NSHumanReadableCopyright: "Copyright © 2026 TypeBetter. All rights reserved."
+        SUFeedURL: "https://raw.githubusercontent.com/Vladimirbabic/typebettermac/main/appcast.xml"
+        SUPublicEDKey: "Zm6BMUkB/UwYb3aPUvzl086c6ZuTD8Ok98cbug6h6w4="
+        SUEnableAutomaticChecks: true
+        SUAutomaticallyUpdate: true
+        SUScheduledCheckInterval: 86400
