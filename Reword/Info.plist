@@ -28,5 +28,11 @@
 	<string>Zm6BMUkB/UwYb3aPUvzl086c6ZuTD8Ok98cbug6h6w4=</string>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/Vladimirbabic/typebettermac/main/appcast.xml</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>
