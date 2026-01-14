@@ -44,6 +44,6 @@ targets:
       path: TypeBetter/Info.plist
       properties:
         LSUIElement: true
-        CFBundleShortVersionString: "1.4"
-        CFBundleVersion: "5"
+        CFBundleShortVersionString: "1.7"
+        CFBundleVersion: "8"
         NSHumanReadableCopyright: "Copyright © 2026 TypeBetter. All rights reserved."
