@@ -7,24 +7,6 @@
         <description>Most recent updates to TypeBetter</description>
         <language>en</language>
 
-        <!--
-        HOW TO RELEASE A NEW VERSION:
-
-        1. Update version in Info.plist (CFBundleShortVersionString and CFBundleVersion)
-
-        2. Build and notarize:
-           APPLE_ID=you@email.com APPLE_APP_PASSWORD=xxxx ./scripts/build-and-notarize.sh
-
-        3. Create signed release:
-           GITHUB_REPO=Vladimirbabic/typebettermac ./scripts/create_release.sh
-
-        4. Copy the <item> output and paste it below (newest first)
-
-        5. Create GitHub Release:
-           gh release create v1.1 Releases/TypeBetter-1.1.zip --title "v1.1" --notes "Release notes"
-
-        6. Commit and push this appcast.xml
-        -->
 
         <!-- PASTE NEW VERSIONS HERE (newest first) -->
 
