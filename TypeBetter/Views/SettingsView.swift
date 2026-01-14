@@ -1,4 +1,5 @@
 import SwiftUI
+import ApplicationServices
 
 struct SettingsView: View {
     @StateObject private var settings = SettingsManager.shared
@@ -73,12 +74,22 @@ struct SettingsTabButton: View {
 struct GeneralSettingsView: View {
     @ObservedObject var settings: SettingsManager
     @StateObject private var launchAtLogin = LaunchAtLoginService.shared
+    @State private var hasAccessibility = false
 
     private let brandPurple = Color(red: 155/255, green: 123/255, blue: 212/255)
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
+                // Permissions Status Section
+                PermissionsStatusView(
+                    hasAccessibility: $hasAccessibility,
+                    hasAPIKey: hasAPIKey(for: settings.selectedProvider),
+                    selectedProvider: settings.selectedProvider
+                )
+
+                Divider()
+
                 // AI Provider Section
                 VStack(alignment: .leading, spacing: 12) {
                     Label("AI Provider", systemImage: "cpu")
@@ -145,6 +156,12 @@ struct GeneralSettingsView: View {
             }
             .padding(20)
         }
+        .onAppear {
+            hasAccessibility = AXIsProcessTrusted()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            hasAccessibility = AXIsProcessTrusted()
+        }
     }
 
     private var modelHint: String {
@@ -167,6 +184,114 @@ struct GeneralSettingsView: View {
         guard hasAPIKey(for: provider) else { return }
         settings.selectedProvider = provider
         settings.selectedModel = provider.defaultModel
+    }
+}
+
+// MARK: - Permissions Status
+
+struct PermissionsStatusView: View {
+    @Binding var hasAccessibility: Bool
+    let hasAPIKey: Bool
+    let selectedProvider: AIProvider
+
+    private let brandPurple = Color(red: 155/255, green: 123/255, blue: 212/255)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Status", systemImage: "checkmark.shield")
+                .font(.headline)
+
+            VStack(spacing: 8) {
+                // Accessibility Permission
+                PermissionRow(
+                    icon: "hand.raised.fill",
+                    title: "Accessibility",
+                    description: "Required to read selected text",
+                    isGranted: hasAccessibility,
+                    action: hasAccessibility ? nil : openAccessibilitySettings
+                )
+
+                // API Key Status
+                PermissionRow(
+                    icon: "key.fill",
+                    title: "\(selectedProvider.displayName) API Key",
+                    description: "Required for AI features",
+                    isGranted: hasAPIKey,
+                    action: nil
+                )
+            }
+        }
+    }
+
+    private func openAccessibilitySettings() {
+        NSWorkspace.shared.open(SystemURLs.accessibilitySettings)
+    }
+}
+
+struct PermissionRow: View {
+    let icon: String
+    let title: String
+    let description: String
+    let isGranted: Bool
+    let action: (() -> Void)?
+
+    private let brandPurple = Color(red: 155/255, green: 123/255, blue: 212/255)
+
+    var body: some View {
+        HStack(spacing: 12) {
+            // Icon
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundColor(isGranted ? .green : .orange)
+                .frame(width: 24)
+
+            // Title and description
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 13, weight: .medium))
+                Text(description)
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            // Status indicator
+            if isGranted {
+                HStack(spacing: 4) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                    Text("Granted")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                }
+            } else {
+                if let action = action {
+                    Button(action: action) {
+                        Text("Grant")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(brandPurple)
+                            .foregroundColor(.white)
+                            .cornerRadius(4)
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundColor(.orange)
+                        Text("Missing")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+            }
+        }
+        .padding(10)
+        .background(isGranted ? Color.green.opacity(0.08) : Color.orange.opacity(0.08))
+        .cornerRadius(8)
     }
 }
 
